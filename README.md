@@ -1,8 +1,10 @@
 # XConf Edge Agent
 
 A lightweight, self-contained network configuration backup daemon designed for zero-knowledge data privacy. The XConf Edge Agent pulls switch/router configurations over SSH/Telnet, masks sensitive credentials locally, encrypts them at the source, and syncs them with Cloud Storage.
+* **Official Website:** [xconf.ai](https://xconf.ai)
 
 一款轻量级、自包含的网络设备配置备份守护进程，专为“零知识”数据隐私安全设计。XConf Edge Agent 通过 SSH/Telnet 协议抓取交换机/路由器配置，在本地自动脱敏敏感凭证，并在源端完成 AES-256 加密，最终同步至云端存储。
+* **官方网站：** [xconf.ai](https://xconf.ai)
 
 ---
 
