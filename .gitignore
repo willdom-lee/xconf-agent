@@ -1,0 +1,27 @@
+# Go Binaries & Executables
+xconf-agent
+xconf-agent-dev
+xconf-agent-linux
+xconf-agent-linux-arm64
+bin/
+*.exe
+*.exe.local
+*.dll
+*.so
+*.dylib
+
+# Local Databases, Logs & User Configurations
+data/
+config.yaml
+README_zh.txt
+
+# Local wrangler development & State
+.wrangler/
+.DS_Store
+.idea/
+.vscode/
+
+# Temporary / Scratch Files
+scratch/
+*.log
+*.enc

@@ -1,0 +1,11 @@
+prompt_regex: '(?m)^[a-zA-Z0-9_\-\.\x2f\x3a\x40]+[#\$]\s*$'
+init_commands:
+  - "config system console"
+  - "set output standard"
+  - "end"
+backup_command: "show full-configuration"
+noise_filters:
+  - '(?m)^#config-version=.*$'
+  - '(?m)^#\s*Serial-Number:.*$'
+  - '(?m)^#\s*Last Update:.*$'
+  - '(?m)^#\s*Last config change:.*$'

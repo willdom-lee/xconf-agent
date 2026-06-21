@@ -1,0 +1,7 @@
+prompt_regex: '(?m)^[a-zA-Z0-9_\-\.\x2f\x3a\x40]+[#>]\s*$'
+init_commands:
+  - "no page"
+backup_command: "show running-config"
+noise_filters:
+  - '(?m)^;.*$'
+  - '(?m)^Current configuration :.*$'

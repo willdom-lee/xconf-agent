@@ -1,0 +1,9 @@
+prompt_regex: '(?m)^[<\[][a-zA-Z0-9_\-\.]+[>\]]\s*$'
+init_commands:
+  - "screen-length 0 temporary"
+backup_command: "display current-configuration"
+noise_filters:
+  - '(?m)^#Last configuration change at.*$'
+  - '(?m)^#Last commit at.*$'
+  - '(?m)^#\s*Saved at.*$'
+  - '(?m)^#\s*Saved Config.*$'
