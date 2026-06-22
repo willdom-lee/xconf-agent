@@ -25,3 +25,4 @@ README_zh.txt
 scratch/
 *.log
 *.enc
+proxy.py
