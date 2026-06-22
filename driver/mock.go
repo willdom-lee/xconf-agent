@@ -75,12 +75,12 @@ dns server 8.8.8.8
 dns server 1.1.1.1
 #
 local-user admin class manage
- password simple $6$jXz5wQ9r$HjKw29s8aB83cK8d98d1a
+ password simple $6$dummyhash$mockadmin
  service-type ssh telnet terminal
  authorization-attribute user-role network-admin
 #
 local-user operator class manage
- password simple $6$mPs2wY5t$PlKq83u7sB94dJ8e98f2c
+ password simple $6$dummyhash$mockoperator
  service-type ssh
  authorization-attribute user-role network-operator
 #

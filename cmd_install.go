@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -127,8 +126,7 @@ func runInstall(args []string) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		bodyBytes, _ := io.ReadAll(resp.Body)
-		fmt.Printf("Error: Token verification failed (HTTP %d): %s\n", resp.StatusCode, string(bodyBytes))
+		fmt.Printf("Error: Token verification failed (HTTP %d). Please check your token and try again.\n", resp.StatusCode)
 		os.Exit(1)
 	}
 

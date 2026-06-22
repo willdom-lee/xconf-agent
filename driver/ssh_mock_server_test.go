@@ -190,8 +190,8 @@ func TestEdgeBackupPipelineWithSimulator(t *testing.T) {
 Building configuration...
 Current configuration : 100 bytes
 !
-username admin privilege 15 secret 5 $1$mERr$hx5qqD7
-snmp-server community read simple public-comm
+username admin privilege 15 secret 5 $1$mERr$mockciscopass
+snmp-server community read simple mock_community
 interface GigabitEthernet0/1
  shutdown
 !
@@ -200,7 +200,7 @@ end`,
 version 7.1.070
 #
 local-user admin class manage
- password simple h3c123
+ password simple mock_h3c_pass
  service-type ssh
 #
 interface GigabitEthernet1/0/1
@@ -211,7 +211,7 @@ return`,
 version 8.0
 #
 local-user admin class manage
- password simple huawei123
+ password simple mock_huawei_pass
  service-type ssh
 #
 interface GigabitEthernet2/0/1
@@ -221,7 +221,7 @@ return`,
 		"ruijie": `!
 Building configuration...
 !
-username admin privilege 15 secret 5 $1$mERr$ruijie123
+username admin privilege 15 secret 5 $1$mERr$mockruijiepass
 interface GigabitEthernet0/2
  shutdown
 !
@@ -231,13 +231,13 @@ end`,
 end
 config system admin
     edit "admin"
-        password simple fortinet123
+        password simple mock_fortinet_pass
     next
 end`,
 		"juniper": `system {
     host-name JuniperRouter;
     root-authentication {
-        password simple "$1$encrypted$salt";
+        password simple "mock_juniper_pass";
     }
 }
 interfaces {
@@ -250,7 +250,7 @@ interfaces {
     }
 }`,
 		"aruba": `hostname "ArubaSwitch"
-password simple "aruba123"
+password simple "mock_aruba_pass"
 interface 1
    no shutdown
 exit`,
@@ -281,49 +281,49 @@ exit`,
 			username:         "cisco",
 			expectedInConfig: "interface GigabitEthernet0/1",
 			maskedTarget:     "secret 5 [MASKED]",
-			unmaskedSecret:   "$1$mERr$hx5qqD7",
+			unmaskedSecret:   "$1$mERr$mockciscopass",
 		},
 		{
 			vendor:           "h3c",
 			username:         "h3c",
 			expectedInConfig: "interface GigabitEthernet1/0/1",
 			maskedTarget:     "password simple [MASKED]",
-			unmaskedSecret:   "h3c123",
+			unmaskedSecret:   "mock_h3c_pass",
 		},
 		{
 			vendor:           "huawei",
 			username:         "huawei",
 			expectedInConfig: "interface GigabitEthernet2/0/1",
 			maskedTarget:     "password simple [MASKED]",
-			unmaskedSecret:   "huawei123",
+			unmaskedSecret:   "mock_huawei_pass",
 		},
 		{
 			vendor:           "ruijie",
 			username:         "ruijie",
 			expectedInConfig: "interface GigabitEthernet0/2",
 			maskedTarget:     "secret 5 [MASKED]",
-			unmaskedSecret:   "$1$mERr$ruijie123",
+			unmaskedSecret:   "$1$mERr$mockruijiepass",
 		},
 		{
 			vendor:           "fortinet",
 			username:         "fortinet",
 			expectedInConfig: "set hostname FortiGate",
 			maskedTarget:     "password simple [MASKED]",
-			unmaskedSecret:   "fortinet123",
+			unmaskedSecret:   "mock_fortinet_pass",
 		},
 		{
 			vendor:           "juniper",
 			username:         "juniper",
 			expectedInConfig: "JuniperRouter",
 			maskedTarget:     "password simple [MASKED]",
-			unmaskedSecret:   "$1$encrypted$salt",
+			unmaskedSecret:   "mock_juniper_pass",
 		},
 		{
 			vendor:           "aruba",
 			username:         "aruba",
 			expectedInConfig: "ArubaSwitch",
 			maskedTarget:     "password simple [MASKED]",
-			unmaskedSecret:   "aruba123",
+			unmaskedSecret:   "mock_aruba_pass",
 		},
 	}
 
