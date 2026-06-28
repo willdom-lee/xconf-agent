@@ -171,44 +171,53 @@ func SaveConfig(path string, cfg *Config) error {
 		template := `# ==============================================================================
 # XConf Agent 配置文件 (XConf Agent Configuration)
 # 安全提示：此文件包含敏感的加密密钥及云端访问令牌，文件权限必须设置为 0600 (仅所有者可读写)
+# Security Tip: This file contains sensitive encryption keys and cloud access tokens.
+# File permissions must be set to 0600 (read/write only for owner).
 #
 # 目录与数据收拢说明 (Folder Sandbox Description)：
 #   本探针采用“绿色沙箱目录”设计，当本配置文件保存在某个文件夹内时：
+#   This agent uses a "green sandbox directory" design. When this config file is saved:
 #   1. 运行日志会自动生成在同级的 data/agent.log 中。 (Logs are written to relative data/agent.log)
 #   2. 本地加密备份包会安全地收拢在同级的 data/history/ 目录下。 (Backups are stored under data/history/)
 #   3. 常用命令、排错与灾难解密指南请参考同级目录下的 README.txt (英文) 或 README_zh.txt (中文)。
 #      (Please refer to README.txt (English) or README_zh.txt (Chinese) in the same directory)
 # ==============================================================================
 
-tenant_id: "%s"  # 您的租户组织唯一标识 (由系统自动解析)
-agent_id: "%s"   # 当前探针节点的唯一标识 (安装时自动生成)
-agent_key: "%s" # 本地 AES-256-GCM 强加密密钥 (请线下妥善保管)
-agent_jwt: "%s" # 用于与云端 API 安全通信的 JWT 令牌 (自动轮询认证)
-supabase_url: "%s" # 云端 API 服务网关终结点
-supabase_anon_key: "%s" # Supabase 匿名公钥
+tenant_id: "%s"  # 您的租户组织唯一标识 (Your tenant organization ID - automatically parsed)
+agent_id: "%s"   # 当前探针节点的唯一标识 (Your unique agent node ID - auto-generated)
+agent_key: "%s" # 本地 AES-256-GCM 强加密密钥 (Local AES-256-GCM encryption key - please keep it secure)
+agent_jwt: "%s" # 用于与云端 API 安全通信的 JWT 令牌 (JWT token for secure API communication - auto-rotated)
+supabase_url: "%s" # 云端 API 服务网关终结点 (Cloud API Gateway endpoint)
+supabase_anon_key: "%s" # Supabase 匿名公钥 (Supabase Anonymous public key)
 
 # ==============================================================================
 # 网络设备纳管列表 (Network Devices List)
-# 运维指引：
+# 运维指引 (O&M Guidelines)：
 #   1. 新增设备：直接在 devices 列表中添加新项，填入 IP、用户名、密码等参数。
+#      (Add Device: Add a new entry to the "devices" list with IP, username, password, etc.)
 #   2. 安全秘钥：系统通过 agent_id + 唯一的设备名称 (name) 自动进行云端安全映射，
 #      因此您完全不需要手动管理复杂的设备 UUID，只需保证设备名称 (name) 唯一即可。
+#      (Device Mapping: The system maps devices securely using agent_id + unique device name.
+#      You do not need to manage UUIDs; just ensure that the device "name" is unique.)
 #   3. 密码安全：password 字段支持明文密码，也支持从环境变量动态读取 (格式为 env:环境变量名)。
+#      (Password Security: Cleartext is supported, as well as loading from env vars (e.g. env:VAR_NAME).)
 #   4. SSH 校验与算法兼容性 (SSH Verification & Legacy Compatibility)：
 #      默认情况下，探针对 SSH 设备启用严格主机密钥校验 (TOFU 模式)。
 #      若设备较为老旧且使用已被现代标准废弃的加密算法 (如 diffie-hellman-group1-sha1 等)，
 #      请显式配置：legacy_compatible: true。此配置将自动跳过主机校验并自动放行老旧弱密码算法。
+#      (SSH compatibility: The agent enforces strict host key checks by default. For legacy devices
+#      using outdated algorithms (e.g. diffie-hellman-group1-sha1), configure "legacy_compatible: true"
+#      to automatically skip host key checks and enable legacy cipher compatibility.)
 # ==============================================================================
 devices:
-  - name: "Switch-Core-1"                  # 可视化设备唯一名称 (请保证同一探针下唯一)
-    ip: "192.168.1.1"                      # 设备的管理 IP 地址 (根据您的真实网络修改)
-    port: 22                               # 访问端口 (SSH 默认 22，Telnet 默认 23)
-    protocol: "ssh"                        # 通信协议 ("ssh" 或 "telnet")
-    vendor: "cisco"                        # 设备厂商类型 ("cisco", "huawei", "h3c", "ruijie", "fortinet", "juniper", "aruba")
-    username: "admin"                      # 登录用户名
-    password: "your_password_here"         # 登录密码 (支持明文或 env:VAR)
-    # legacy_compatible: true              # 兼容模式：放宽安全限制以支持老旧弱密钥/弱算法 (默认为 false)
-
+  - name: "Switch-Core-1"                  # 可视化设备唯一名称 (Unique display name - must be unique per agent)
+    ip: "192.168.1.1"                      # 设备的管理 IP 地址 (Device management IP)
+    port: 22                               # 访问端口 (Access port - default 22 for SSH, 23 for Telnet)
+    protocol: "ssh"                        # 通信协议 (Protocol: "ssh" or "telnet")
+    vendor: "cisco"                        # 设备厂商类型 (Device vendor: "cisco", "huawei", "h3c", "ruijie", "fortinet", "juniper", "aruba")
+    username: "admin"                      # 登录用户名 (Login username)
+    password: "your_password_here"         # 登录密码 (Login password - plain text or env:VAR)
+    # legacy_compatible: true              # 兼容模式：放宽安全限制以支持老旧弱密钥/弱算法 (Legacy compatibility: set true if needed)
 `
 		data = []byte(fmt.Sprintf(template, cfg.TenantID, cfg.AgentID, cfg.AgentKey, cfg.AgentJWT, cfg.SupabaseURL, cfg.SupabaseAnonKey))
 	} else {
@@ -308,7 +317,7 @@ func SaveReadme(path string) error {
 [!] 极重要前提：在运行以下解密命令前，请确保您的命令行终端已经切换到了当前探针所在的文件夹目录下！
 
 具体脱机解密操作步骤（小白指引）：
-  步骤一：打开命令行终端（CMD 或 PowerShell）。
+  步骤一：以管理员身份打开命令行终端（Windows下右键选择“以管理员身份运行”打开 CMD 或 PowerShell，macOS/Linux 下使用 sudo 权限。否则在解密写出明文配置文件时，系统可能会因为权限不足拦截并报错 [Permission Denied]）。
   步骤二：使用 "cd" 命令切换到您的探针安装路径。
          例如您的探针装在 D:\xconf-agent，则需输入：cd /d D:\xconf-agent
          例如您的探针装在 C:\Users\Username\xconf-agent，则需输入：cd C:\Users\Username\xconf-agent
@@ -384,7 +393,7 @@ If the cloud dashboard is unavailable, decrypt local backup snapshots offline:
 
 [!] WARNING: Always change directory (cd) to this agent folder in your terminal before running!
 
-1. Open terminal (CMD or PowerShell).
+1. Open the command terminal as Administrator (On Windows, right-click and select "Run as Administrator" to open CMD or PowerShell; on macOS/Linux, run the commands with "sudo" prefix. Otherwise, writing the output decrypted file may fail due to "Permission Denied" errors).
 2. Change directory:
    e.g. cd /d D:\xconf-agent
 3. Run decryption:

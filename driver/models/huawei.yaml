@@ -1,4 +1,4 @@
-prompt_regex: '(?m)^[<\[][a-zA-Z0-9_\-\.]+[>\]]\s*$'
+prompt_regex: '(?m)^[<\[][^\s>\]]+[>\]]\s*$'
 init_commands:
   - "screen-length 0 temporary"
 backup_command: "display current-configuration"

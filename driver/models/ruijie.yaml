@@ -1,4 +1,4 @@
-prompt_regex: '(?m)^[a-zA-Z0-9_\-\.\x2f\x3a\x40]+[#>]\s*$'
+prompt_regex: '(?m)^[^\s#>]+[#>]\s*$'
 init_commands:
   - "terminal length 0"
 backup_command: "show running-config"
